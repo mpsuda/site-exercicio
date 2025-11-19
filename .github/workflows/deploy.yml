@@ -1,10 +1,16 @@
+name: Deploy Webpage to GitHub Pages
+
 on:
   push:
     branches:
-      - main  # Mantenha 'main' se essa for sua branch principal
+      - main
 
 jobs:
   build-and-deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Código
@@ -16,7 +22,6 @@ jobs:
       - name: Upload Artifact (index.html, style.css)
         uses: actions/upload-pages-artifact@v3
         with:
-          # O ponto ('.') indica que o conteúdo a ser publicado está na raiz do repositório.
           path: '.' 
 
       - name: Deploy automático
