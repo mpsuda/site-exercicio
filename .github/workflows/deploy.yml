@@ -1,29 +1,31 @@
-name: Deploy Webpage to GitHub Pages
+name: Deploy to GitHub Pages
 
 on:
   push:
     branches:
-      - main
+      - main  # Altere para o nome da branch que você usa
 
 jobs:
-  build-and-deploy:
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
+  deploy:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Checkout Código
-        uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Configurar Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Artifact (index.html, style.css)
-        uses: actions/upload-pages-artifact@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
         with:
-          path: '.' 
+          node-version: '14'  # Ajuste conforme necessário
 
-      - name: Deploy automático
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Install dependencies
+        run: npm install  # Execute isso apenas se você tiver um package.json
+
+      - name: Build the project
+        run: npm run build  # Ajuste conforme o seu comando de build
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist  # Ajuste para o diretório correto
